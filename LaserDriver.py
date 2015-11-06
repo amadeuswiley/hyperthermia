@@ -4,12 +4,13 @@ Created on Mon Oct 05 13:55:38 2015
 
 @author: Christopher
 """
-#import the packages needed to run the script
+
 import numpy
 import matplotlib.pyplot as plt
 import HeatTransferModel as htm
 import DiffusionModel as dfm
 import CellDeathModel as cdm
+
 
 # Define intervals used:
 M = 20 

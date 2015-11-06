@@ -4,9 +4,10 @@ Created on Mon Oct 05 13:55:38 2015
 
 @author: Christopher
 """
-#Import the packages needed to run the script:
+
 import numpy
 import matplotlib.pyplot as plt
+
 
 class HeatTransfer:
     def __init__(self, r):
