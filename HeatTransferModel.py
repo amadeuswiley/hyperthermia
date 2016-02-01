@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 
 
 class HeatTransfer:
-    def __init__(self, r):
+    def __init__(self, r, OD=0.5):
         self.r = r
         self.h = r[1]-r[0]
         self.M = len(r) - 1
@@ -23,8 +23,9 @@ class HeatTransfer:
         # Tissue density. Units are kg/m^3.
         self.heatcap = 3400.0 
         # Tissue heat capacity. Units are J/(kg*K).
-        self.OD = 0.5 
+        self.OD = OD
         # Optical density of laser. Range: [0.0,0.5]. Unitless.
+
 
         # Laser controls:
         self.laseroff = 30.0 
@@ -79,7 +80,7 @@ if __name__ == '__main__':
     T[:,0] = 38.0
     # Fills the first column (time step) with 38's.
     # That's normal body temperature in degrees C.
-    HTmodel = HeatTransfer(r) 
+    HTmodel = HeatTransfer(r,OD=0.5) 
     # Creates a heat transfer model object--runs init.
 
     # Time loop:
