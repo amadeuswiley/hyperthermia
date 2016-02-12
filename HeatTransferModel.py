@@ -10,14 +10,14 @@ import matplotlib.pyplot as plt
 
 
 class HeatTransfer:
-    def __init__(self, r, OD=0.5):
+    def __init__(self, r, OD, alpha, Q):
         self.r = r
         self.h = r[1]-r[0]
         self.M = len(r) - 1
-        self.alpha = 3.0*10**(-7.0) 
+        self.alpha = alpha 
         # This is the tissue or fluid thermal diffusivity
         # w/ GNRs, equal to k/(density*specific heat) units are (m^2)/s.
-        self.Q = 9.0*10**6 
+        self.Q = Q
         # Laser energy. Varies between 8.0*10**6 and 3.0*10**7 W/(m^3). 
         self.rho = 1000.0 
         # Tissue density. Units are kg/m^3.

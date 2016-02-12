@@ -6,7 +6,7 @@ Created on Mon Oct 05 13:55:38 2015
 """
 
 import numpy
-import scipy
+import scipy.optimize as optimize
 import matplotlib.pyplot as plt
 import HeatTransferModel as htm
 import DiffusionModel as dfm
@@ -31,6 +31,21 @@ def main(OD=0.5):
     stop = 200.0 
     # Final time in seconds. End of the model, not the end of the laser.
     
+    #Heat Transfer Model Values:
+    alpha = 3.0*10**(-7.0) 
+    # This is the tissue or fluid thermal diffusivity
+    # w/ GNRs, equal to k/(density*specific heat) units are (m^2)/s.
+    Q = 9.0*10**6 
+    # Laser energy. Varies between 8.0*10**6 and 3.0*10**7 W/(m^3). 
+    
+    # Diffusion parameters:
+    DiffusionCoefficient = 0.000001
+#TODO: figure out which units this is in, and what values are reasonable.
+    couponedge = 0.02
+    # Defines where in space the drug coupon extends to. Units are meters. 
+#TODO: STILL NEEDS TO KNOW WHAT THE DIFFUSION COEFFICIENT IS, BASED ON TEMPERATURE.
+    
+    
     # Node locations:
     r = numpy.linspace(center,edge,M+1)
     t = numpy.linspace(start,stop,N+1)
@@ -43,11 +58,11 @@ def main(OD=0.5):
     T[:,0] = 38.0
     # Fills the first column (time step) with 38's.
     # That's normal body temperature in degrees C.
-    HTmodel = htm.HeatTransfer(r,OD)
+    HTmodel = htm.HeatTransfer(r, OD, alpha, Q)
     # Creates a heat transfer model object--runs init.
     
     # Define diffusion matrix:
-    DIFFmodel = dfm.Diffusion(r,edge)
+    DIFFmodel = dfm.Diffusion(r,edge,couponedge,DiffusionCoefficient)
     # Creates an HPI diffusion model object--runs init.
     HPIconc = numpy.zeros((M+1,N+1))
     # Creates a concentration matrix.
@@ -85,10 +100,10 @@ def main(OD=0.5):
 #    plt.ylabel('Temperature (C)')
 #    plt.show()
 #    
-    plt.plot(r,fd[:,0::20])
-    plt.xlabel('r (meters)')
-    plt.ylabel('Fraction of Cells Dead')
-    plt.show()
+#    plt.plot(r,fd[:,0::20])
+#    plt.xlabel('r (meters)')
+#    plt.ylabel('Fraction of Cells Dead')
+#    plt.show()
 #    
 #    plt.plot(r,HPIconc[:,0::20])
 #    plt.xlabel('r (meters)')
@@ -100,12 +115,13 @@ def main(OD=0.5):
     healthy2 = fd[numpy.round(M+1)*canceredge/edge+2,N]
     healthy3 = fd[numpy.round(M+1)*canceredge/edge+3,N]
     healthy4 = fd[numpy.round(M+1)*canceredge/edge+4,N]
-    print(healthy0,healthy1,healthy2,healthy3,healthy4)
+#    print(healthy0,healthy1,healthy2,healthy3,healthy4)
     optimizervalue = healthy0 + 2*healthy1 + 4*healthy2 + 16*healthy3 + 64*healthy4
     print("optimizervalue = %s " % (optimizervalue))
+    print("OD + %s" % (OD))
     return optimizervalue
     
 # Optimizer
-main(OD=0.5)
+#main(OD=0.5)
 
-#scipy.optimize.minimize(
+optimize.minimize(main,0.5)

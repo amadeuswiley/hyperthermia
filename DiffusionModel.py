@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 
 
 class Diffusion:
-    def __init__(self,r,edge):
+    def __init__(self,r,edge,couponedge,DiffusionCoefficient):
         self.r = r
         self.h = r[1]-r[0]
         self.M = len(r) - 1
@@ -20,11 +20,9 @@ class Diffusion:
         # Defines binding. No clue what the value should be.
         
         # Diffusion parameters:
-        self.DiffusionCoefficient = 0.000001
-#TODO: figure out which units this is in, and what values are reasonable.
-        self.couponedge = 0.02
-        # Defines where in space the drug coupon extends to. Units are meters. 
-#TODO: STILL NEEDS TO KNOW WHAT THE DIFFUSION COEFFICIENT IS, BASED ON TEMPERATURE.
+        self.DiffusionCoefficient = DiffusionCoefficient
+        self.couponedge = couponedge
+        
         if self.couponedge > edge:
             print('error: the HPI/GNR coupon cannot be bigger than the sample.\
             Fix either "edge" or "couponedge."')
