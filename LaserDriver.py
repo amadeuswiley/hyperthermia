@@ -12,8 +12,8 @@ import HeatTransferModel as htm
 import DiffusionModel as dfm
 import CellDeathModel as cdm
 
-#TODO: main() needs to be a function of a couple things for the optimizer.
-def main(OD=0.5):
+
+def main(Qnondim):
     
     # Define intervals used:
     M = 20 
@@ -35,8 +35,11 @@ def main(OD=0.5):
     alpha = 3.0*10**(-7.0) 
     # This is the tissue or fluid thermal diffusivity
     # w/ GNRs, equal to k/(density*specific heat) units are (m^2)/s.
-    Q = 9.0*10**6 
-    # Laser energy. Varies between 8.0*10**6 and 3.0*10**7 W/(m^3). 
+    Q = (8.0*10**6)*Qnondim
+    # Laser energy density. Varies between 8.0*10**6 and 3.0*10**7 W/(m^3).
+    # The optimizer passes in Qnondim, which should (0,1). Q redimentionalizes.
+    OD = 0.5
+    # Optical Density of tissues; indirect measure of GNR conc'n.
     
     # Diffusion parameters:
     DiffusionCoefficient = 0.000001
@@ -116,12 +119,16 @@ def main(OD=0.5):
     healthy3 = fd[numpy.round(M+1)*canceredge/edge+3,N]
     healthy4 = fd[numpy.round(M+1)*canceredge/edge+4,N]
 #    print(healthy0,healthy1,healthy2,healthy3,healthy4)
-    optimizervalue = healthy0 + 2*healthy1 + 4*healthy2 + 16*healthy3 + 64*healthy4
+    optimizervalue = (healthy0 + 2*healthy1 + 4*healthy2 + 16*healthy3 + 64*healthy4)/87
     print("optimizervalue = %s " % (optimizervalue))
-    print("OD + %s" % (OD))
+    print("Q = %s" % (Q))
     return optimizervalue
     
 # Optimizer
-#main(OD=0.5)
-
-optimize.minimize(main,0.5)
+#main(Q=9.0*10**6)
+#Default optimizer method:
+#res=optimize.minimize(main,8400000,options={'eps': 1, 'gtol': 1e-10})
+    
+#alternate method:
+res=optimize.minimize(main,1.0,options={'gtol': 1e-10})
+print(res)
