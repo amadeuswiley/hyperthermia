@@ -112,23 +112,42 @@ def main(Qnondim):
 #    plt.xlabel('r (meters)')
 #    plt.ylabel('HPI Concentration (unitless)')
 #    plt.show()
+
+
+    #find number of spatial nodes with cancer
+    numbercancernodes = numpy.rint((M+1)*canceredge/edge)
+    numbercancernodes = int(numbercancernodes)
+#TODO: this needs to be an integer, not a float.
+    print(numbercancernodes)
     # Create nodes for optimizing
-    healthy0 = fd[numpy.round(M+1)*canceredge/edge+0,N]
-    healthy1 = fd[numpy.round(M+1)*canceredge/edge+1,N]
-    healthy2 = fd[numpy.round(M+1)*canceredge/edge+2,N]
-    healthy3 = fd[numpy.round(M+1)*canceredge/edge+3,N]
-    healthy4 = fd[numpy.round(M+1)*canceredge/edge+4,N]
+    healthy0 = fd[numbercancernodes+1,N]
+    healthy1 = fd[numbercancernodes+2,N]
+    healthy2 = fd[numbercancernodes+3,N]
+    healthy3 = fd[numbercancernodes+4,N]
+    healthy4 = fd[numbercancernodes+5,N]
 #    print(healthy0,healthy1,healthy2,healthy3,healthy4)
-    optimizervalue = (healthy0 + 2*healthy1 + 4*healthy2 + 16*healthy3 + 64*healthy4)/87
+    healthyopt = (healthy0 + 2*healthy1 + 4*healthy2 + 16*healthy3 + 64*healthy4)/87
+    
+    #find average cancer fraction dead
+    cancertotal = 0
+    for i in range(0,numbercancernodes):
+        cancertotal += fd[i,N]
+    canceraverage = cancertotal/(1+numbercancernodes)
+    #convert to a variable    
+    canceropt = 1 - canceraverage
+    #create lagrange multiplier, which scales how important killing all the
+        #cancer is to the optimizer
+    lagrange = 25
+    optimizervalue = (healthyopt + lagrange *canceropt)/(1+lagrange)
+    print("healthyopt= %s " % (healthyopt))
     print("optimizervalue = %s " % (optimizervalue))
-    print("Q = %s" % (Q))
+    print("canceraverage = %s " % (canceraverage))
+    print("Qnondim = %s" % (Qnondim))
     return optimizervalue
-    
-# Optimizer
-#main(Q=9.0*10**6)
-#Default optimizer method:
-#res=optimize.minimize(main,8400000,options={'eps': 1, 'gtol': 1e-10})
-    
-#alternate method:
-res=optimize.minimize(main,1.0,options={'gtol': 1e-10})
+
+# Optimizer:
+res=optimize.minimize(main,1.0,options={'gtol': 1e-8})
 print(res)
+
+# Program
+#main(0.75618441)
