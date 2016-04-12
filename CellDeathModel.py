@@ -2,6 +2,16 @@
 """
 Created on Sat Oct 17 14:56:54 2015
 
+This script handles cell death. It calculates cell death rates at a given
+temperature, and can also integrate those rates into an overall death fraction
+for a given spatial node. Cell death follows an Arrhenius-type equation.
+
+As of this writing (2016 - 04 - 12), this model has not been finely tuned for
+a specific cell line. Nor has the impact of HSPI concentration on the death
+parameters been implemented, as the data did not exist when I started this
+project.
+
+
 @author: Christopher
 """
 

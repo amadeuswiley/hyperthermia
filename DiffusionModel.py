@@ -2,6 +2,19 @@
 """
 Created on Fri Oct 23 18:36:36 2015
 
+This script models diffusion of HSPI's from a 'coupon'of the drugs placed over
+the center of the cancerous region. Concentrations are nondimensionalized.
+
+As of this writing (2016 - 04 - 12), the information from this script is passed
+back to LaserDriver.py, but is unused, as data on the impacts of HSPI's on
+cell death rates were not available. This should be an area of future work.
+Further, the diffusion is currently temperature-independent, which is likely
+inaccurate.
+
+The code under the line
+if __name__ == '__main__':
+allows the script to be run standalone, for debugging purposes.
+
 @author: Christopher
 """
 

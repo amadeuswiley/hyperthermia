@@ -2,6 +2,20 @@
 """
 Created on Mon Oct 05 13:55:38 2015
 
+
+This script models heat transfer in the system, using a second-order Finite 
+Difference Method (https://en.wikipedia.org/wiki/Finite_difference) of the
+heat equation (https://en.wikipedia.org/wiki/Heat_equation).
+
+As of this writing (2016 - 04 - 12), this script contains some variables for
+laser operation {laseroff,laseredge} which may be useful as optimizable 
+variables in the future.
+
+
+The code under the line
+if __name__ == '__main__':
+allows the script to be run standalone, for debugging purposes.
+
 @author: Christopher
 """
 
@@ -56,7 +70,7 @@ class HeatTransfer:
         if time <= self.laseroff:
             newT[0] += dt*self.Q*(1.0-10.0**(-self.OD))/(self.rho*self.heatcap) 
         newT[self.M] = 38.0
-        #The edge of the culture is defined to be normal body temperature.
+        # The edge of the culture is defined to be normal body temperature.
         return(newT)
         
 if __name__ == '__main__':
